@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accident Risk Prediction</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+
+background:linear-gradient(135deg,#1e3c72,#2a5298,#4facfe);
+
+height:100vh;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+animation:bgmove 8s infinite alternate;
+
+}
+
+@keyframes bgmove{
+
+0%{background-position:left;}
+100%{background-position:right;}
+
+}
+
+.container{
+
+width:480px;
+
+background:rgba(255,255,255,0.18);
+
+backdrop-filter:blur(18px);
+
+border-radius:25px;
+
+padding:30px;
+
+box-shadow:0 10px 30px rgba(0,0,0,.3);
+
+animation:popup 1s;
+
+}
+
+@keyframes popup{
+
+from{
+
+transform:scale(.8);
+opacity:0;
+
+}
+
+to{
+
+transform:scale(1);
+opacity:1;
+
+}
+
+}
+
+h1{
+
+text-align:center;
+
+color:white;
+
+margin-bottom:10px;
+
+font-size:28px;
+
+}
+
+.subtitle{
+
+text-align:center;
+
+color:white;
+
+margin-bottom:5px;
+
+}
+
+.accuracy{
+
+text-align:center;
+
+font-weight:bold;
+
+color:#00ff95;
+
+margin-bottom:20px;
+
+}
+
+label{
+
+color:white;
+
+font-weight:600;
+
+display:block;
+
+margin-top:10px;
+
+margin-bottom:5px;
+
+}
+
+select,input{
+
+width:100%;
+
+padding:12px;
+
+border:none;
+
+border-radius:12px;
+
+outline:none;
+
+font-size:15px;
+
+transition:.4s;
+
+}
+
+select:hover,input:hover{
+
+transform:scale(1.02);
+
+}
+
+select:focus,input:focus{
+
+box-shadow:0 0 10px cyan;
+
+}
+
+button{
+
+width:100%;
+
+padding:14px;
+
+margin-top:25px;
+
+font-size:18px;
+
+font-weight:bold;
+
+background:linear-gradient(45deg,#00c6ff,#0072ff);
+
+color:white;
+
+border:none;
+
+border-radius:30px;
+
+cursor:pointer;
+
+transition:.4s;
+
+}
+
+button:hover{
+
+transform:translateY(-4px);
+
+box-shadow:0 10px 20px rgba(0,0,0,.4);
+
+}
+
+button:active{
+
+transform:scale(.95);
+
+}
+
+#result{
+
+margin-top:25px;
+
+padding:18px;
+
+border-radius:15px;
+
+text-align:center;
+
+font-size:20px;
+
+font-weight:bold;
+
+display:none;
+
+animation:fade 0.8s;
+
+}
+
+@keyframes fade{
+
+from{
+
+opacity:0;
+transform:translateY(20px);
+
+}
+
+to{
+
+opacity:1;
+transform:translateY(0);
+
+}
+
+}
+
+.footer{
+
+text-align:center;
+
+margin-top:20px;
+
+color:white;
+
+font-size:14px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🚗 Accident Risk Prediction</h1>
+
+<p class="subtitle">Machine Learning Based Risk Analysis</p>
+
+<p class="accuracy">✔ Model Accuracy : 100%</p>
+
+<label>Weather</label>
+
+<select id="weather">
+
+<option>Select Weather</option>
+
+<option>Rain</option>
+
+<option>Clear</option>
+
+<option>Fog</option>
+
+<option>Storm</option>
+
+</select>
+
+<label>Road Type</label>
+
+<select id="road">
+
+<option>Select Road Type</option>
+
+<option>Highway</option>
+
+<option>City</option>
+
+<option>Village</option>
+
+</select>
+
+<label>Traffic Level</label>
+
+<select id="traffic">
+
+<option>Select Traffic Level</option>
+
+<option>Low</option>
+
+<option>Medium</option>
+
+<option>High</option>
+
+</select>
+
+<label>Speed (km/h)</label>
+
+<input type="number" id="speed" min="0" max="200">
+
+<label>Vehicle Type</label>
+
+<select id="vehicle">
+
+<option>Select Vehicle Type</option>
+
+<option>Bike</option>
+
+<option>Car</option>
+
+<option>Truck</option>
+
+</select>
+
+<label>Time</label>
+
+<select id="time">
+
+<option>Select Time</option>
+
+<option>Morning</option>
+
+<option>Afternoon</option>
+
+<option>Evening</option>
+
+<option>Night</option>
+
+</select>
+
+<button onclick="predictRisk()">🚦 Predict Risk</button>
+
+<div id="result"></div>
+
+<div class="footer">
+
+Designed by ❤️ Project Payalungada Kodurama
+
+</div>
+
+</div>
+
+<script>
+
+function predictRisk(){
+
+let weather=document.getElementById("weather").value;
+let road=document.getElementById("road").value;
+let traffic=document.getElementById("traffic").value;
+let speed=document.getElementById("speed").value;
+let vehicle=document.getElementById("vehicle").value;
+let time=document.getElementById("time").value;
+
+if(weather=="Select Weather" ||
+
+road=="Select Road Type" ||
+
+traffic=="Select Traffic Level" ||
+
+vehicle=="Select Vehicle Type" ||
+
+time=="Select Time" ||
+
+speed<=0){
+
+let result=document.getElementById("result");
+
+result.style.display="block";
+
+result.style.background="#ff4d4d";
+
+result.style.color="white";
+
+result.innerHTML="⚠ Please fill all fields.";
+
+return;
+
+}
+
+let risk="LOW";
+let color="#00c851";
+let emoji="🟢";
+
+if(speed>80 || traffic=="High" || weather=="Rain" || weather=="Fog"){
+
+risk="HIGH";
+
+color="#ff4444";
+
+emoji="🔴";
+
+}
+else if(speed>50 || traffic=="Medium"){
+
+risk="MEDIUM";
+
+color="#ffbb33";
+
+emoji="🟡";
+
+}
+
+let result=document.getElementById("result");
+
+result.style.display="block";
+
+result.style.background=color;
+
+result.style.color="white";
+
+result.innerHTML=emoji+" Accident Risk : <br><br>"+risk;
+
+}
+
+</script>
+
+</body>
+</html>
